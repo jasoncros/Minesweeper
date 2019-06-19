@@ -11,5 +11,5 @@ The only case in which it would prove impossible to solve would be when the only
 * **P**: pause game
 * **Q**: quit game<br/><br/>
 *Optional* (mainly intended for auto-clicking)<br/>
-**A**: uncover tile (~left click)
-**S**: flag tile (~right click)
+* **A**: uncover tile (~left click)
+* **S**: flag tile (~right click)
