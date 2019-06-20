@@ -423,10 +423,21 @@ def rainbow_bg():
 		b = int(127*math.sin(math.pi * (roygbiv + 2/3))+127)
 		gameDisplay.fill(pygame.Color(r,g,b))
 
+def toggle_fullscreen():
+	global display_width, display_height
+	if gameDisplay.get_flags() & pygame.FULLSCREEN:
+		pygame.display.set_mode((true_res[0]//2,true_res[1]//2), pygame.RESIZABLE)
+	else:
+		pygame.display.set_mode(true_res, pygame.FULLSCREEN)
+	display_width, display_height = pygame.display.Info().current_w, pygame.display.Info().current_h
+	gameDisplay.fill(WHITE)
+	reload_images()
+	game_restart()
+
 def game_loop(game_mode,ai):
 	#play game in loop
 	global tiles,lost,won,paused,restart,start_ms,num_clicks,num_flags,num_bombs,face_state,enter_finished,timer;
-	global display_height,display_width,new_score,score_name;
+	global gameDisplay	,display_height,display_width,new_score,score_name;
 	
 	#default tiles
 	if restart:
@@ -535,6 +546,18 @@ def game_loop(game_mode,ai):
 						pyautogui.click(button='left')
 					if event.key == pygame.K_s: #flag
 						pyautogui.click(button='right')
+					if event.key == pygame.K_f:
+						toggle_fullscreen()
+
+			#quit using X in windowed mode
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				sys.exit()
+
+			#resize window
+			if event.type == pygame.VIDEORESIZE:
+				gameDisplay = pygame.display.set_mode((event.w,event.h), pygame.RESIZABLE)
+				display_width, display_height = pygame.display.Info().current_w, pygame.display.Info().current_h
 
 			#display tile images
 			if not won:
@@ -563,7 +586,6 @@ def game_loop(game_mode,ai):
 			won = False
 		if won:
 			gameDisplay.blit(textinput.get_surface(), (display_width/2-110, display_height/2+25))
-
 
 		else:
 			if start_ms != 0:
